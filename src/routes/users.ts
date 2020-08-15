@@ -4,7 +4,7 @@ import { createValidator } from "express-joi-validation";
 import {createUser, deleteUser, updateUser, getUserById, getUsers} from "../controller/userController";
 
 const validator = createValidator();
-const router = express.Router();
+const userRouter = express.Router();
 const schema = Joi.object({
   login: Joi.string().required(),
   password: Joi.string()
@@ -17,10 +17,10 @@ const schema = Joi.object({
     .required()
 });
 
-router.get("/", getUsers);
-router.get("/:id", getUserById);
-router.post("/create", validator.body(schema), createUser);
-router.put("/update/:id", updateUser);
-router.delete("/delete/:id", deleteUser);
+userRouter.get("/", getUsers);
+userRouter.get("/:id", getUserById);
+userRouter.post("/create", validator.body(schema), createUser);
+userRouter.put("/update/:id", updateUser);
+userRouter.delete("/delete/:id", deleteUser);
 
-export default router;
+export default userRouter;
