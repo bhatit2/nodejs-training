@@ -63,7 +63,7 @@ const updateUser = (req: Request, res: Response) => {
     .catch((error) => res.status(400).send(error));
 }
 
-const deleteUser = async (req: Request, res: Response) => {
+const deleteUser = async (req: Request, res: Response, next: any) => {
   return User
     .update({
       isDeleted: true
@@ -72,7 +72,10 @@ const deleteUser = async (req: Request, res: Response) => {
         id: req.params.id
       }
     })
-    .then(() => res.status(200).send("User deleted successfully"))
+    .then(() => {
+      res.status(200).send("User deleted successfully");
+      next();
+    })
     .catch((error) => res.status(400).send(error));
 
 }

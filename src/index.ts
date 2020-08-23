@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import userRouter from "./routes/users";
 import groupRouter from './routes/groups';
+import usergroupRouter from './routes/userGroup';
+
 import { sequelize } from "./models";
 
 const testConnection = async () => {
@@ -17,6 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/users", userRouter);
 app.use("/groups" , groupRouter);
+app.use("/usergroups", usergroupRouter);
 
 sequelize.sync().then(() => {
   testConnection().then(() => {
