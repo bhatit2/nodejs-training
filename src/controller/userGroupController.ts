@@ -4,19 +4,19 @@ import Models from '../models';
 
 const { UserGroup } = Models;
 
-const getUserGroups = async (req: Request, res: Response) => {
+const getUserGroups = async (req: Request, res: Response, next:any) => {
     UserGroup.findAll()
         .then((ug: any) => res.status(201).send(ug))
-        .catch((error: any) => res.status(400).send(error))
+        .catch((error: any) => next(error))
 }
 
-const getUserGroupById = async (req: Request, res: Response) => {
+const getUserGroupById = async (req: Request, res: Response, next:any) => {
     UserGroup.findByPk(req.params.id)
         .then((ug: any) => res.status(201).send(ug))
-        .catch((error: any) => res.status(400).send(error))
+        .catch((error: any) => next(error))
 }
 
-const addUsersToGroup = async (req: Request, res: Response) => {
+const addUsersToGroup = async (req: Request, res: Response, next:any) => {
     let { userId, groupId } = req.body;
     return UserGroup
         .create({
@@ -25,35 +25,35 @@ const addUsersToGroup = async (req: Request, res: Response) => {
             groupId
         })
         .then((ug: any) => res.status(201).send(ug))
-        .catch((error: any) => res.status(400).send(error));
+        .catch((error: any) => next(error));
 }
 
-const deleteUserGroup = async (req: Request, res: Response) => {
+const deleteUserGroup = async (req: Request, res: Response, next:any) => {
     return UserGroup.destroy({
         where: {
-            id: req.params.id
+            userId: req.params.id
         }
     }).then(() => res.status(200).send("User Group deleted successfully"))
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => next(error));
 }
 
-const deleteGroupRecords = async (req: Request, res: Response) => {
+const deleteGroupRecords = async (req: Request, res: Response, next:any) => {
     return UserGroup.destroy({
         where: {
             groupId: req.params.id
         }
     }).then(() => res.status(200).send("Group Records deleted successfully"))
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => next(error));
 }
 
-const deleteUserRecords = async (req: Request, res: Response, next : any) => {
+const deleteUserRecords = async (req: Request, res: Response, next:any) => {
     console.log("delete user records");
     return UserGroup.destroy({
         where: {
             userId: req.params.id
         }
     }).then(() => res.status(200).send("User Records deleted successfully"))
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => next(error));
 }
 
 export {

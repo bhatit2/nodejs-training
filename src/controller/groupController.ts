@@ -9,19 +9,23 @@ import {
 
 const { Group } = Models;
 
-const getGroups = async (req: Request, res: Response) => {
+const getGroups = async (req: Request, res: Response, next:any) => {
     Group.findAll()
         .then((groups) => res.status(201).send(groups))
-        .catch((error) => res.status(400).send(error))
+        .catch((error) => {
+            next(error);
+        })
 }
 
-const getGroupById = async (req: Request, res: Response) => {
+const getGroupById = async (req: Request, res: Response, next:any) => {
     Group.findByPk(req.params.id)
         .then((groups) => res.status(201).send(groups))
-        .catch((error) => res.status(400).send(error))
+        .catch((error) => {
+            next(error);
+        })
 }
 
-const createGroup = async (req: Request, res: Response) => {
+const createGroup = async (req: Request, res: Response, next:any) => {
     let { name, permissions } = req.body;
     return Group
         .create({
@@ -30,10 +34,12 @@ const createGroup = async (req: Request, res: Response) => {
             permissions
         })
         .then((group) => res.status(201).send(group))
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => {
+            next(error);
+        });
 }
 
-const updateGroup = (req: Request, res: Response) => {
+const updateGroup = (req: Request, res: Response, next:any) => {
     return Group
         .findByPk(req.params.id)
         .then(group => {
@@ -52,7 +58,9 @@ const updateGroup = (req: Request, res: Response) => {
                 .then(() => res.status(200).send(updatedGroup))
                 .catch((error) => res.status(400).send(error));
         })
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => {
+            next(error);
+        });
 }
 
 const deleteGroup = async (req: Request, res: Response, next:any) => {
@@ -64,7 +72,9 @@ const deleteGroup = async (req: Request, res: Response, next:any) => {
         res.status(200).send("Group deleted successfully");
         next();
     })
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => {
+            next(error);
+        });
 }
 
 export {

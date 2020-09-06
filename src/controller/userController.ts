@@ -15,19 +15,22 @@ interface UserRequestSchema extends ValidatedRequestSchema {
     age: number;
   };
 }
-const getUsers = async (req: Request, res: Response) => {
+const getUsers = async (req: Request, res: Response, next:any) => {
   User.findAll()
-    .then((users) => res.status(201).send(users))
-    .catch((error) => res.status(400).send(error))
+    .then((users) => {
+      res.status(201).send(users);
+      next();
+    })
+    .catch((error) => next(error))
 }
 
-const getUserById = async (req: Request, res: Response) => {
+const getUserById = async (req: Request, res: Response, next:any) => {
   User.findByPk(req.params.id)
     .then((users) => res.status(201).send(users))
-    .catch((error) => res.status(400).send(error))
+    .catch((error) => next(error))
 }
 
-const createUser = async (req: ValidatedRequest<UserRequestSchema>, res: Response) => {
+const createUser = async (req: ValidatedRequest<UserRequestSchema>, res: Response, next: any) => {
   let { login, password, age } = req.body;
   return User
     .create({
@@ -38,10 +41,10 @@ const createUser = async (req: ValidatedRequest<UserRequestSchema>, res: Respons
       isDeleted: false
     })
     .then((student) => res.status(201).send(student))
-    .catch((error) => res.status(400).send(error));
+    .catch((error) => next(error));
 }
 
-const updateUser = (req: Request, res: Response) => {
+const updateUser = (req: Request, res: Response, next:any) => {
   return User
     .findByPk(req.params.id)
     .then(user => {
@@ -58,9 +61,9 @@ const updateUser = (req: Request, res: Response) => {
           }
         })
         .then(() => res.status(200).send(updatedUser))
-        .catch((error) => res.status(400).send(error));
+        .catch((error) => next(error));
     })
-    .catch((error) => res.status(400).send(error));
+    .catch((error) => next(error));
 }
 
 const deleteUser = async (req: Request, res: Response, next: any) => {
@@ -76,7 +79,7 @@ const deleteUser = async (req: Request, res: Response, next: any) => {
       res.status(200).send("User deleted successfully");
       next();
     })
-    .catch((error) => res.status(400).send(error));
+    .catch((error) => next(error));
 
 }
 
