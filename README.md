@@ -1,2 +1,2 @@
-# Nodejs_training_week2
+# Nodejs_training
 Created with CodeSandbox
